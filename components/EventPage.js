@@ -1,19 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Button } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// import { NavigationContainer } from '@react-navigation/native';
+// import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 
-
-
-export default function EventPage({ route, navigation }) {
-  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-
+export default function HomeScreen({ navigation }) {
+  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
   return (
     <View style={styles.mainSection}>
-      <Text>Event Creation Page {route.params.paramKey} </Text>
-      <Button title="Back to Home" onPress={() => {navigation.navigate('HomeScreen'); ScreenOrientation.unlockAsync();}}/>
+      <Text>Home Screen</Text>
+      <Button title="Create New Match" onPress={() => navigation.navigate('NewMatch')}/>
     </View>
   );
 }
