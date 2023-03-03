@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { StyleSheet, Text, View, SafeAreaView, Button, TextInput, ScrollView } from 'react-native';
 
 
 export default function HomeScreen({ navigation }) {
