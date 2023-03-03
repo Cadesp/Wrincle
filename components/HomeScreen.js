@@ -16,8 +16,7 @@ export default function HomeScreen({ navigation }) {
         placeholder='Time'
         placeholderTextColor='black'
         textAlign='center'
-        value={timeH}
-        onChangeText={(timeH) => setTimeH(timeH)} />
+        />
       <TextInput
         style={styles.input}
         placeholder='Position'
