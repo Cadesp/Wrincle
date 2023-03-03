@@ -8,7 +8,6 @@ import { StyleSheet, Text, View, SafeAreaView, Button, TextInput, ScrollView } f
 export default function HomeScreen({ navigation }) {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
 
-  const [timeH, setTimeH] = useState('');
 
   return (
     <><Text style={styles.titleText}>Match Summary</Text><View style={styles.mainSection}>
