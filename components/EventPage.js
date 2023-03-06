@@ -14,12 +14,18 @@ export default function EventPage({ route, navigation }) {
   const insets = useSafeAreaInsets();
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
   return (
-    <SafeAreaView style={styles.safeView}>
-    <View  style={styles.container}>
-      <Text style='alignItems: '>Match Summary {route.params.paramKey} </Text>
-      <Button title="Back to Home" onPress={() => {navigation.navigate('HomeScreen'); ScreenOrientation.unlockAsync();}}/>
-    </View>
+    <><SafeAreaView style={styles.safeView}>
+      <View style={styles.container}>
+        <Text style='alignItems: '>Match Summary {route.params.paramKey} </Text>
+        <Button title="Back to Home" onPress={() => { navigation.navigate('HomeScreen'); ScreenOrientation.unlockAsync(); } } />
+      </View>
     </SafeAreaView>
+    <TextInput
+        style={styles.input}
+        placeholder='Event Name'
+        placeholderTextColor='black'
+        textAlign='center' />
+        </>
     
   );
 }
@@ -52,5 +58,24 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30,
     color: "white",
-  }
+  },
+  input: {
+    alignItems: 'stretch',
+    width: 150,
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    fontColor: 'black',
+  },
+checkInput: {
+    alignItems: 'stretch',
+    width: 150,
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    fontColor: 'black',
+    flexDirection: 'row',
+}
 });
