@@ -19,12 +19,37 @@ export default function EventPage({ route, navigation }) {
         <Text style='alignItems: '>Match Summary {route.params.paramKey} </Text>
         <Button title="Back to Home" onPress={() => { navigation.navigate('HomeScreen'); ScreenOrientation.unlockAsync(); } } />
       </View>
-    </SafeAreaView>
-    <TextInput
+      <TextInput 
         style={styles.input}
-        placeholder='Event Name'
-        placeholderTextColor='black'
+        placeholder= "Time"
+        placeholderTextColor = 'black'
         textAlign='center' />
+        <TextInput 
+        style={styles.input}
+        placeholder= "Position"
+        placeholderTextColor = 'black'
+        textAlign='center' />
+        <TextInput 
+        style={styles.input}
+        placeholder= "Position"
+        placeholderTextColor = 'black'
+        textAlign='center' />
+        <TextInput 
+        style={styles.input}
+        placeholder= "Riding Time"
+        placeholderTextColor = 'black'
+        textAlign='center' />
+        <TextInput 
+        style={styles.input}
+        placeholder= "Period"
+        placeholderTextColor = 'black'
+        textAlign='center' />
+        <TextInput 
+        style={styles.input}
+        placeholder= "Overtime"
+        placeholderTextColor = 'black'
+        textAlign='center' />
+    </SafeAreaView>
         </>
     
   );
@@ -42,14 +67,19 @@ const styles = StyleSheet.create({
   },
   safeView: {
     
-    backgroundColor: 'gray',
+    backgroundColor: 'white',
     justifyContent: 'center',
+    flexWrap: 'wrap',
+        flexDirection: 'row',
+        alignItems: 'center', 
+        gap: '10rem',
+        justifyContent: 'center',
 
   },
   mainSection: {
     height: '80%',
     alignItems: "center", 
-    justifyContent: "center"
+    justifyContent: "center",
   },
   titleText: {
     alignItems: "center",
@@ -61,10 +91,10 @@ const styles = StyleSheet.create({
   },
   input: {
     alignItems: 'stretch',
-    width: 150,
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
+    width: 75,
+    height: 25,
+    margin: 10,
+    borderWidth: 2,
     padding: 10,
     fontColor: 'black',
   },
