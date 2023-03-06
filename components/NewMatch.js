@@ -8,7 +8,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 
 
 export default function NewMatch( { navigation }, props ) {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 
  const [nameH, setNameH] = useState('');
 
