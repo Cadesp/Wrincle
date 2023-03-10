@@ -5,7 +5,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Checkbox from 'expo-checkbox';
-import * as ScreenOrientation from 'expo-screen-orientation';
+import DropDownPicker from 'react-native-dropdown-picker'
+
+
 
 export default function EventPage({ route, navigation }) {
   const insets = useSafeAreaInsets();
@@ -21,11 +23,15 @@ export default function EventPage({ route, navigation }) {
         placeholder= "Time"
         placeholderTextColor = 'black'
         textAlign='center' />
-        <TextInput 
+        <DropDownPicker
         style={styles.input}
-        placeholder= "Position"
-        placeholderTextColor = 'black'
-        textAlign='center' />
+          items={[
+            {label: 'Neutral', value: 'ne'},
+            {label: 'Top', value: 'to'},
+            {label: 'Bottom', value: 'bo'},
+        ]}
+
+        />
     
         <TextInput 
         style={styles.input}
