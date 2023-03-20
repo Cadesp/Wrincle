@@ -6,12 +6,28 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Checkbox from 'expo-checkbox';
 import DropDownPicker from 'react-native-dropdown-picker'
-
+import  { SelectList } from 'react-native-dropdown-select-list';
+import { useState } from 'react';
 
 
 export default function EventPage({ route, navigation }) {
   const insets = useSafeAreaInsets();
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+
+  const NewMatch = ( { navigation } ) => {
+    const [firstNameH, setFirstNameH] = useState('home first name');
+    const [firstNameA, setFirstNameA] = useState('first name');
+    const [lastNameH, setLastNameH] = useState('home last name');
+    const [lastNameA, setLastNameA] = useState('last name');
+    const [teamH, setTeamH] = useState('home team');
+    const [teamA, setTeamA] = useState('away team');
+    const [weight, setWeight] = useState('weight class');
+    const [isNatQualH, setNatQualH] = useState('NO');
+    const [isAllAmerH, setAllAmerH] = useState('NO');
+    const [isNatQualA, setNatQualA] = useState('NO');
+    const [isAllAmerA, setAllAmerA] = useState('NO');
+  }
+
   return (
     <><SafeAreaView style={styles.safeView}>
       <View style={styles.container}>
@@ -24,23 +40,34 @@ export default function EventPage({ route, navigation }) {
         placeholderTextColor = 'black'
         textAlign='center' />
         
-        <TextInput 
-        style={styles.input}
-        placeholder= "Position"
-        placeholderTextColor = 'black'
-        textAlign='center' />
-
+        <SelectList 
+                setSelected={(isNatQualH) => setNatQualH(isNatQualH)}
+                data={[{label: 'YES', value: 'YES'}, {label: 'NO', value: 'NO'}]}
+                save="value"
+                placeholder={'National Qualifier?'}
+                boxStyles={{
+                    width: 150, 
+                    height: 45, 
+                    backgroundColor: 'transparent', 
+                    borderRadius: 0, 
+                    borderWidth: 1, 
+                    borderColor: 'black', 
+                    margin: 20,
+                }}
+            />
     
         <TextInput 
         style={styles.input}
         placeholder= "Riding Time"
         placeholderTextColor = 'black'
         textAlign='center' />
+        
         <TextInput 
         style={styles.input}
         placeholder= "Period"
         placeholderTextColor = 'black'
         textAlign='center' />
+
         <TextInput 
         style={styles.input}
         placeholder= "Overtime"
