@@ -23,15 +23,13 @@ export default function EventPage({ route, navigation }) {
         placeholder= "Time"
         placeholderTextColor = 'black'
         textAlign='center' />
-        <DropDownPicker
+        
+        <TextInput 
         style={styles.input}
-          items={[
-            {label: 'Neutral', value: 'ne'},
-            {label: 'Top', value: 'to'},
-            {label: 'Bottom', value: 'bo'},
-        ]}
+        placeholder= "Position"
+        placeholderTextColor = 'black'
+        textAlign='center' />
 
-        />
     
         <TextInput 
         style={styles.input}
