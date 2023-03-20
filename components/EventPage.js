@@ -15,16 +15,9 @@ export default function EventPage({ route, navigation }) {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
 
   const NewMatch = ( { navigation } ) => {
-    const [firstNameH, setFirstNameH] = useState('home first name');
-    const [firstNameA, setFirstNameA] = useState('first name');
-    const [lastNameH, setLastNameH] = useState('home last name');
-    const [lastNameA, setLastNameA] = useState('last name');
-    const [teamH, setTeamH] = useState('home team');
-    const [teamA, setTeamA] = useState('away team');
-    const [weight, setWeight] = useState('weight class');
-    const [isNatQualH, setNatQualH] = useState('NO');
+    const [positionH, setPositionH] = useState('Top');
     const [isAllAmerH, setAllAmerH] = useState('NO');
-    const [isNatQualA, setNatQualA] = useState('NO');
+    const [isPositionA, setPositionA] = useState('Top');
     const [isAllAmerA, setAllAmerA] = useState('NO');
   }
 
@@ -41,10 +34,10 @@ export default function EventPage({ route, navigation }) {
         textAlign='center' />
         
         <SelectList 
-                setSelected={(isNatQualH) => setNatQualH(isNatQualH)}
-                data={[{label: 'YES', value: 'YES'}, {label: 'NO', value: 'NO'}]}
+                setSelected={(isPositionH) => setPositionH(isPositionH)}
+                data={[{label: 'Top', value: 'Top'}, {label: 'Bottom', value: 'Bottom'}, {label: "Neutral", value: 'Neutral'}]}
                 save="value"
-                placeholder={'National Qualifier?'}
+                placeholder={'Select Position'}
                 boxStyles={{
                     width: 150, 
                     height: 45, 
