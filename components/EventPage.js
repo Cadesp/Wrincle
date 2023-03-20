@@ -14,11 +14,9 @@ export default function EventPage({ route, navigation }) {
   const insets = useSafeAreaInsets();
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
 
-  const NewMatch = ( { navigation } ) => {
-    const [positionH, setPositionH] = useState('Top');
-    const [isAllAmerH, setAllAmerH] = useState('NO');
+  const EventPage = ( { navigation } ) => {
+    const [isPositionH, setPositionH] = useState('Top');
     const [isPositionA, setPositionA] = useState('Top');
-    const [isAllAmerA, setAllAmerA] = useState('NO');
   }
 
   return (
