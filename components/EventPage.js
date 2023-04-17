@@ -34,9 +34,11 @@ const insets = useSafeAreaInsets();
 
   const EventPage = ( { navigation } ) => {
     const [periodH, setPeriodH] = useState('1');
-    const [isPositionH, setPositionH] = useState('Top');    const [otH, setOtH] = useState(false);
+    const [isPositionH, setPositionH] = useState('Top');    
+    const [otH, setOtH] = useState(false);
     const [actionTypeH, setActionTypeH] = useState('Tilt');
     const [resultH, setResultH] = useState('Win');
+    const [cautionH, setCautionH] = useState(false);
     
     
 
@@ -162,7 +164,7 @@ const addElement = () => {
 
 <View style={styles.checkInput}>
         <Text>Caution</Text>
-        <Checkbox style={{marginLeft: 10}} value={otH} onValueChange={setOtH}/>
+        <Checkbox style={{marginLeft: 10}} value={cautionH} onValueChange={setCautionH}/>
         </View>
 
 </View>
