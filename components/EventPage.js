@@ -1,224 +1,263 @@
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Button, ScrollView, TextInput, FlatList } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Checkbox from 'expo-checkbox';
-import DropDownPicker from 'react-native-dropdown-picker'
-import  { SelectList } from 'react-native-dropdown-select-list';
-import { useState } from 'react';
+import Svg, { Circle, Rect, AreaChart, Grid, Line, PolyLine } from 'react-native-svg';
+import CheckBox from 'expo-checkbox';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { SelectList } from 'react-native-dropdown-select-list';
+import {useState } from 'react';
+
+const TopSection = ( { navigation } ) => {
+  const [periodH, setPeriodH] = React.useState('1');
+  const [isPositionH, setPosition] = React.useState('Top');
+  const [otH, setOth] = React.useState(false);
+}
 
 
-
-export default function EventPage({ route, navigation }) {
-  
+export default function EventPage({ route, navigation, props }) {
+  //Setup Header
   React.useLayoutEffect(() => {
     navigation.setOptions({
       header: () =>
       (
-        
+            <View style = {styles.topSection}>
           <SafeAreaView style={styles.matchInfo}>
             <View style={{marginTop: 5}}>
               <Text>Match Summary</Text>
               <Text style={{alignItems: 'center'}}>{route.params.paramLastH} VS {route.params.paramLastA}</Text>
             </View>
-      
           </SafeAreaView>
-      ),
-    })
-  });
+          <View>
 
-const insets = useSafeAreaInsets();
-  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-
-  const EventPage = ( { navigation } ) => {
-    const [periodH, setPeriodH] = useState('1');
-    const [isPositionH, setPositionH] = useState('Top');    
-    const [otH, setOtH] = useState(false);
-    const [actionTypeH, setActionTypeH] = useState('Tilt');
-    const [resultH, setResultH] = useState('Win');
-    const [cautionH, setCautionH] = useState(false);
-    
-    
-
-  <SafeAreaView style={styles.safeView}>
-      <View style={styles.container}>
-      </View>
-      
-      <TextInput
+        <TextInput
         style={styles.input}
         placeholder= "Time"
         placeholderTextColor = 'black'
         textAlign='center' />
-        
-      <SelectList 
+
+        <SelectList 
         setSelected={(isPositionH) => setPositionH(isPositionH)}
         data={[{label: 'Top', value: 'Top'}, {label: 'Bottom', value: 'Bottom'}, {label: "Neutral", value: 'Neutral'}]}
         save="value"
         placeholder={'Position'}
         boxStyles={styles.selectList}
-            />
+        onValueChange={handlePosition} />
 
-              <SelectList  
-                setSelected={(periodH) => setPeriodH(periodH)}
-                data={[{label: '1', value: '1'}, {label: '2', value: '2'}, {label: '3', value: '3'}]}
-                save="value"
-                placeholder={"Period"}
-                boxStyles={styles.selectList}
-                
-
-            />
-    
         <TextInput 
         style={styles.input}
         placeholder= "Riding Time"
         placeholderTextColor = 'black'
         textAlign='center' />
 
-  <View style={styles.checkInput}>
+        <SelectList  
+        setSelected={(periodH) => setPeriodH(periodH)}
+        data={[{label: '1', value: '1'}, {label: '2', value: '2'}, {label: '3', value: '3'}]}
+        save="value"
+        placeholder={"Period"}
+        boxStyles={styles.selectList} />
+
+        <View style={styles.checkInput}>
         <Text>Overtime</Text>
         <Checkbox style={{marginLeft: 10}} value={otH} onValueChange={setOtH}/>
         </View>
 
-    </SafeAreaView>
-    
-  };
+            </View>
+         </View>
+      ),
+    })
+  });
 
- 
 
-const [events, changeEvents]  = React.useState([
-]);
+//lock orientation to landscape
+  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+//events list section
 
+const [events, changeEvents]  = React.useState([]);
 const [listState, setListState] = React.useState(events);
 const [idx, incr] = React.useState(0);
 const [title, setTitle] = React.useState('');
-
-function handleChange(event) {
-  setTitle(event.target.value);
-}
-
-const addElement = () => {
-  var newArray = [...events , {id : idx, text: title }];
-  incr(idx+1);
-  setListState(newArray);
-  changeEvents(newArray);
-}
+const [circlePositions, setCirclePositions] = React.useState([]);
+const [localCircles, setLocalCircles] = React.useState(circlePositions);
+const [circleColor, setCircleColor] = React.useState('red');
 
 
+const addElement = () => { //adds element to list
+  if(title != '' && localCircles.length%2 == 0 && localCircles.length/2 == events.length+1)//if input is not null
+  {
+  var newArray = [...events , {id : idx, text: title }]; //create new array with new element
+  incr(idx+1); //iterates new id value of each event in list (starts as 0)
   
+  setListState(newArray); //updating states
+  changeEvents(newArray);
+
+  }
+};
+
+const deleteElement = () => {  //delete element
+  if(events.length !=0 && localCircles.length%2 == 0 && localCircles.length/2 == events.length)
+  {
+    
+    incr(idx-1); //decrease id so events maintain ascending order with no skips
+    const newArray = listState.filter((item) => item.id !== events[events.length-1].id); //create new array without last element
+    setListState(newArray); //updating states
+    changeEvents(newArray);
+    const newCircles = [...localCircles];
+    newCircles.pop();
+    newCircles.pop();
+    setLocalCircles(newCircles);
+    setCirclePositions(newCircles);
+  }
+};
+
+
+const deleteLastCircle = () => {
+    if(localCircles.length%2 !=0 || localCircles.length/2 == events.length+1){
+
+      if(circleColor == "red"){//revert back to circle color that is being deleted
+        setCircleColor("orange");
+      }
+      else
+      {
+        setCircleColor("red");
+      }
+    let newCircles = [...localCircles];//delete circle
+    newCircles.pop();
+    setLocalCircles(newCircles);
+    setCirclePositions(newCircles);
+    }
+  }
+
+  const handlePress = (event) => {
+    if(localCircles.length == events.length*2 || localCircles.length==0 || localCircles.length == events.length*2+1 ) {
+    const { locationX, locationY } = event.nativeEvent;
+    const newCircle = {id:idx, x: locationX, y: locationY, color: circleColor };
+
+    if(circleColor == "red"){//change to next circle to be placed
+      setCircleColor("orange");
+    }
+    else
+    {
+      setCircleColor("red");
+    }
+    let newCircles = [...localCircles, newCircle];
+    setLocalCircles(newCircles);
+    setCirclePositions(newCircles);
+    }
+
+    
+  };
+
+
 
 
   return (
 
     
-    <View style={styles.safeView}>
-      <View style={styles.eventsSection}>
-        
-        {/* <View style={{alignItems: 'center'}}> */}
-          <FlatList
+    <View style={styles.backgrounMainSection}>
+      <View style={styles.eventsSection}> 
+      
+          <FlatList 
             data={listState}
             renderItem={item => (
               <View style={styles.item}>
-                <Text >{item.item.text}</Text>
+                <Text >{item.item.text}</Text> 
               </View>
             )}
-
             keyExtractor={item => item.id}
             />
-          {/* </View> */}
-          
       </View>
 
-      <View style={styles.mainSection}>
-      <View>
-<SelectList 
-  
-  setSelected={(actionTypeH) => setActionTypeH(actionTypeH)}
-  data={[{label: 'Tilt', value: 'Tilt'}, {label: 'Half', value: 'Half'}, {label: "Armbar", value: 'Armbar'},  {label: "Cradle", value: 'Cradle'},  {label: "Leg Ride", value: 'Leg Ride'},  {label: "Takedown To Back", value: 'Takedown To Back'}]}
-  save="value"
-  placeholder={'Action Type'}
-  boxStyles={styles.selectList}
-      />
 
-<TextInput 
-        style={styles.input}
-        placeholder= "Points"
-        placeholderTextColor = 'black'
-        textAlign='center' />
-
-<TextInput    
-          style={styles.input}
-          placeholder= "Team"
-          placeholderTextColor = 'black'
-          textAlign = 'center' />
-
-<SelectList
-        setSelected={(resultH) => setResultH(resultH)}
-        data={[{label: 'Loss', value: 'Loss'}, {label: "Win", value: 'Win'}]}
-        save="value"
-        placeholder={'Result'}
-        boxStyles={styles.selectList}
-
-      />
-
-<View style={styles.checkInput}>
-        <Text>Caution</Text>
-        <Checkbox style={{marginLeft: 10}} value={cautionH} onValueChange={setCautionH}/>
-        </View>
-
-</View>
+      <View style={styles.eventInput}>
         <TextInput placeholder="input" value={title} onChangeText={(title) => setTitle(title)}/>
-        <Button title="Update" onPress={addElement}/>
-
-      
+        <Button title="update" onPress={addElement}/>
+        <Button title="Delete last Event" onPress={deleteElement} />
+        
       </View>
+      <View style={styles.timeInput}>
 
+      </View>
+      
+      <View style={styles.chartSection}>
+
+      <View style={{ flex: 1, justifyContent: 'top', alignItems: 'center' }}>
+    <Svg width="200" height="200"  onPress={handlePress}>
+    <Rect x = '0' y = '0' width='200' height='200' fill='blue' />
+    <Circle cx="100" cy="100" r="100" fill="lightgrey" />
+    <Circle cx='100' cy='100' r='50' fill='white' stroke="blue" />
+    <Line x1="100" y1="0" x2="100" y2="200" stroke="blue" strokeWidth="1" />
+    <Line x1='0' y1='100' x2='200' y2='100' stroke='blue' strokeWidth='1' />
+
+      {localCircles.map((circle, index) => (
+        
+        <Circle key={index} cx={circle.x} cy={circle.y} r="5" fill={circle.color} stroke="black" strokewidth="1" />
+        
+      ))}
+    </Svg>
+    </View>
+        {/* <Graph circles={circlePositions} setCirclePositions={setCirclePositions}/> */}
+        <Button title="Delete last Event" onPress={deleteLastCircle} />
+      </View>
+        
     </View>
     
-    
-
 
     
   );
 }
 
 const styles = StyleSheet.create({
+    topSection: {
+        flexDirection : 'row',
+    },
   header: {
-    height: 90,
-    //alignItems: 'center',
-    //backgroundColor: 'skyblue',
-    
+    height: '10%',  
   },
+
   matchInfo: {
     backgroundColor: 'skyblue',
     height: 90,
     width: '20%',
     borderRightWidth: 3,
     alignItems: 'right',
-    
-    //alignItems: 'center',
-    //paddingTop: '10%',
   },
   container: {
     height: '20%',
     width: '30%',
     backgroundColor: 'skyblue',
     alignItems: "left",
-    
-
   },
-  safeView: {
-    flex: 2,
-    backgroundColor: 'white',
+  backgrounMainSection: {
+    flex: 1,
+    backgroundColor: 'gray',
     flexDirection: 'row',
-    
-
   },
-  mainSection: {
-    width: '80%',
+  eventInput: {
+    width: '25%',
+    height: '75%',
     alignItems: "center", 
-    justifyContent: "center"
+    borderRightWidth: 3,
+    borderTopWidth: 3,
+    borderBottomWidth: 3,
+  },
+  chartSection: {
+    width: '30%',
+    height: '75%',
+    alignItems: "center", 
+    justifyContent: 'center', 
+    borderRightWidth: 3,
+    borderTopWidth: 3,
+    borderBottomWidth: 3,
+  },
+  timeInput: {
+    width: '25%',
+    height: '75%',
+    alignItems: "center", 
+    borderRightWidth: 3,
+    borderTopWidth: 3,
+    borderBottomWidth: 3,
   },
   titleText: {
     alignItems: "center",
@@ -226,7 +265,7 @@ const styles = StyleSheet.create({
     font: "Arial Black",
     fontWeight: "bold",
     fontSize: 30,
-    color: "black",
+    color: "white",
   },
   eventsSection: {
     width: '20%',
@@ -237,14 +276,4 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     alignItems: 'center',
   },
-  input: {
-    alignItems: 'center',
-    width: 100,
-    height: 40,
-    margin: 10,
-    borderWidth: 1,
-    padding: 10,
-    fontColor: 'black',
-  },
-  
 });
