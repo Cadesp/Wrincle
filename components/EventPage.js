@@ -1,70 +1,88 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Button, ScrollView, TextInput, FlatList } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Button, ScrollView, TextInput, FlatList, Checkbox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import Svg, { Circle, Rect, AreaChart, Grid, Line, PolyLine } from 'react-native-svg';
-import CheckBox from 'expo-checkbox';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { SelectList } from 'react-native-dropdown-select-list';
-import {useState } from 'react';
+import Stopwatch from './Stopwatch';
+import DropDownPicker from 'react-native-dropdown-picker';
 
-const TopSection = ( { navigation } ) => {
-  const [periodH, setPeriodH] = React.useState('1');
-  const [isPositionH, setPosition] = React.useState('Top');
-  const [otH, setOth] = React.useState(false);
-}
+// import Graph from './Graph.js'
 
 
 export default function EventPage({ route, navigation, props }) {
+  
+    const [periodH, setPeriodH] = React.useState('1');
+    const [otH, setOtH] = React.useState(false);
+    const [currentPos, setCurrentPos] = React.useState([]);
+    const [positions, setPositions] = React.useState([
+        {label: "Neutral", value:"Neutral"},
+        {label: "Top", value: "Top"},
+        {label: "Bottom", value: "Bottom"}
+      ]);
+    const positionsNeutral = ["Single Leg", "Double Leg", "Hi-C", "Scramble", "Throw", "Front Headlock", "Defended Shot"];
+    const positionsTop = ["Tilt", "Half", "Arm Bar", "Cradle", "Leg Ride", "Takedown to Back"];
+    const positionsBottom = ["Stand Up", "Sit Out", "Switch", "Tripod", "Roll"];
+
+    const [selectedPos, setSelectedPos] = React.useState("");
+    const [selectedOfAction, setSelectedOfAction] = React.useState("");
+  
+
+    const [finalTime, setFinalTime] = React.useState(0);
+    function handleStopwatchStop(timeElapsed) {
+      setFinalTime(timeElapsed);
+    }
+
+    //dropdowns
+    const [open, setOpen] = React.useState(false);
+    const [value, setValue] = React.useState(null);
+
+
+
+    const handlePosition = () => {
+      
+
+    };
   //Setup Header
   React.useLayoutEffect(() => {
     navigation.setOptions({
       header: () =>
       (
-            <View style = {styles.topSection}>
+        <View style={styles.topSection}>
           <SafeAreaView style={styles.matchInfo}>
             <View style={{marginTop: 5}}>
               <Text>Match Summary</Text>
               <Text style={{alignItems: 'center'}}>{route.params.paramLastH} VS {route.params.paramLastA}</Text>
             </View>
           </SafeAreaView>
-          <View>
-
-        <TextInput
-        style={styles.input}
-        placeholder= "Time"
-        placeholderTextColor = 'black'
-        textAlign='center' />
-
-        <SelectList 
-        setSelected={(isPositionH) => setPositionH(isPositionH)}
-        data={[{label: 'Top', value: 'Top'}, {label: 'Bottom', value: 'Bottom'}, {label: "Neutral", value: 'Neutral'}]}
-        save="value"
-        placeholder={'Position'}
-        boxStyles={styles.selectList}
-        onValueChange={handlePosition} />
-
-        <TextInput 
-        style={styles.input}
-        placeholder= "Riding Time"
-        placeholderTextColor = 'black'
-        textAlign='center' />
-
-        <SelectList  
-        setSelected={(periodH) => setPeriodH(periodH)}
-        data={[{label: '1', value: '1'}, {label: '2', value: '2'}, {label: '3', value: '3'}]}
-        save="value"
-        placeholder={"Period"}
-        boxStyles={styles.selectList} />
-
-        <View style={styles.checkInput}>
-        <Text>Overtime</Text>
-        <Checkbox style={{marginLeft: 10}} value={otH} onValueChange={setOtH}/>
-        </View>
-
+            <View style={styles.time}>
+              <Stopwatch onStop={handleStopwatchStop} currentTime={finalTime}/>
             </View>
-         </View>
+            <View style={styles.positionInput}>
+          
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={positions}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setPositions}
+            />
+
+
+
+
+            {/* <SelectList
+            placeholder="Position"
+            setSelected={(val) => setSelectedPos(val)}
+            data={positions}
+            save="value"
+            onSelect={handlePosition}
+            /> */}
+            </View>
+          </View>
+         
       ),
     })
   });
@@ -83,14 +101,16 @@ const [localCircles, setLocalCircles] = React.useState(circlePositions);
 const [circleColor, setCircleColor] = React.useState('red');
 
 
+
 const addElement = () => { //adds element to list
   if(title != '' && localCircles.length%2 == 0 && localCircles.length/2 == events.length+1)//if input is not null
   {
-  var newArray = [...events , {id : idx, text: title }]; //create new array with new element
+  var newArray = [...events , {id : idx, text: title, time: finalTime }]; //create new array with new element
   incr(idx+1); //iterates new id value of each event in list (starts as 0)
-  
+  console.log(finalTime);
   setListState(newArray); //updating states
   changeEvents(newArray);
+
 
   }
 };
@@ -156,6 +176,7 @@ const deleteLastCircle = () => {
 
     
     <View style={styles.backgrounMainSection}>
+  
       <View style={styles.eventsSection}> 
       
           <FlatList 
@@ -171,34 +192,31 @@ const deleteLastCircle = () => {
 
 
       <View style={styles.eventInput}>
-        <TextInput placeholder="input" value={title} onChangeText={(title) => setTitle(title)}/>
+        {/* <TextInput placeholder="input" value={title} onChangeText={(title) => setTitle(title)}/> */}
+      
         <Button title="update" onPress={addElement}/>
         <Button title="Delete last Event" onPress={deleteElement} />
-        
       </View>
+
       <View style={styles.timeInput}>
 
       </View>
       
       <View style={styles.chartSection}>
-
-      <View style={{ flex: 1, justifyContent: 'top', alignItems: 'center' }}>
-    <Svg width="200" height="200"  onPress={handlePress}>
-    <Rect x = '0' y = '0' width='200' height='200' fill='blue' />
-    <Circle cx="100" cy="100" r="100" fill="lightgrey" />
-    <Circle cx='100' cy='100' r='50' fill='white' stroke="blue" />
-    <Line x1="100" y1="0" x2="100" y2="200" stroke="blue" strokeWidth="1" />
-    <Line x1='0' y1='100' x2='200' y2='100' stroke='blue' strokeWidth='1' />
-
-      {localCircles.map((circle, index) => (
-        
-        <Circle key={index} cx={circle.x} cy={circle.y} r="5" fill={circle.color} stroke="black" strokewidth="1" />
-        
-      ))}
-    </Svg>
-    </View>
-        {/* <Graph circles={circlePositions} setCirclePositions={setCirclePositions}/> */}
-        <Button title="Delete last Event" onPress={deleteLastCircle} />
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Svg width="200" height="200"  onPress={handlePress}>
+          <Rect x = '0' y = '0' width='200' height='200' fill='blue' />
+          <Circle cx="100" cy="100" r="100" fill="lightgrey" />
+          <Circle cx='100' cy='100' r='50' fill='white' stroke="blue" />
+          <Line x1="100" y1="0" x2="100" y2="200" stroke="blue" strokeWidth="1" />
+          <Line x1='0' y1='100' x2='200' y2='100' stroke='blue' strokeWidth='1' />
+          
+          {localCircles.map((circle, index) => (
+            <Circle key={index} cx={circle.x} cy={circle.y} r="5" fill={circle.color} stroke="black" strokewidth="1" />
+          ))}
+          </Svg>
+          <Button title="Delete last Event" onPress={deleteLastCircle} />
+        </View>
       </View>
         
     </View>
@@ -209,9 +227,21 @@ const deleteLastCircle = () => {
 }
 
 const styles = StyleSheet.create({
-    topSection: {
-        flexDirection : 'row',
-    },
+  positionInput: {
+    width: '12%',
+    justifyContent: 'center',
+    alignItems: 'right',
+  },
+  time: {
+    width: '20%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRightWidth: 2,
+  },
+  topSection: {
+    flexDirection: "row",
+  },
+
   header: {
     height: '10%',  
   },
