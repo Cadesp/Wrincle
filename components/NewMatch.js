@@ -7,11 +7,13 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 
 
 
-
 export default function NewMatch( { navigation }, props ) {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 
- const [nameH, setNameH] = useState('');
+ const [firstH, setFirstH] = useState('');
+ const [firstA, setFirstA] = useState('');
+ const [lastH, setLastH] = useState('');
+ const [lastA, setLastA] = useState('');
 
     const [natQualH, setNatQualH] = useState(false);
     const [allAmerH, setAllAmerH] = useState(false);
@@ -27,8 +29,8 @@ export default function NewMatch( { navigation }, props ) {
             placeholder='First Name'
             placeholderTextColor='black'
             textAlign='center'
-            value={nameH}
-            onChangeText={(nameH) => setNameH(nameH)}
+            value={firstH}
+            onChangeText={(firstH) => setFirstH(firstH)}
             
         />
         <TextInput 
@@ -36,6 +38,8 @@ export default function NewMatch( { navigation }, props ) {
             placeholder='Last Name'
             placeholderTextColor='black'
             textAlign='center'
+            value={lastH}
+            onChangeText={(lastH) => setLastH(lastH)}
         />
         <TextInput 
             style={styles.input}
@@ -65,12 +69,16 @@ export default function NewMatch( { navigation }, props ) {
             placeholder='First Name'
             placeholderTextColor='black'
             textAlign='center' 
+            value={firstA}
+            onChangeText={(firstA) => setFirstA(firstA)}
         />
         <TextInput 
             style={styles.input}
             placeholder='Last Name'
             placeholderTextColor='black'
             textAlign='center'
+            value={lastA}
+            onChangeText={(lastA) => setLastA(lastA)}
         />
         <TextInput 
             style={styles.input}
@@ -114,7 +122,11 @@ export default function NewMatch( { navigation }, props ) {
         </View>
 
       </View>
-      <Button title="Submit" onPress={() => navigation.navigate('EventPage', {paramKey: nameH})}/>
+      <Button title="Submit" onPress={() => navigation.navigate('EventPage', 
+      {
+        paramLastH: lastH,
+        paramLastA: lastA,
+        })}/>
     </ScrollView>
     )
   }
